@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "175668787012",
+    "project_id": "chatpractice-c186c",
+    "storage_bucket": "chatpractice-c186c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:175668787012:android:1d100792265da7be1ec911",
+        "android_client_info": {
+          "package_name": "project.elite.chatpractice"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9jvR7fmI2T--6KQLQfbkaxhVgqvJVMi4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
