@@ -2,6 +2,7 @@ package project.elite.chatpractice.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,111 +27,130 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import project.elite.chatpractice.R
+import project.elite.chatpractice.navigation.Screens
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navHostController: NavHostController) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.Black)
+    )
 
-    Column(modifier = Modifier.fillMaxSize()) {
-
+    {
+        Spacer(modifier = Modifier.height(20.dp))
+        Text(text = "Welcome back, sakshi", color = Color.White,
+            fontSize = 18.sp)
 
         Spacer(modifier = Modifier.height(20.dp))
-        Text(
-            text = "Welcome back, Nandini",
-            fontSize = 25.sp,
-            fontWeight = FontWeight.SemiBold
-        )
 
-        Spacer(modifier = Modifier.height(20.dp))
         LazyRow {
-            items(5) {
+            items(count = 5)
+            {
                 Spacer(modifier = Modifier.width(10.dp))
-
                 Column(modifier = Modifier.width(60.dp)) {
                     Card(shape = CircleShape, modifier = Modifier.size(50.dp)) {
 
+
                         Image(
                             painter = painterResource(id = R.drawable.background),
-                            contentDescription = "",
+                            contentDescription = " ",
                             contentScale = ContentScale.Crop,
                             modifier = Modifier.fillMaxSize()
+
+
                         )
                     }
-                    Text(text = "Nandini Singh")
+                    Text(text = "sakshi pawar", color = Color.White)
                 }
+
+
             }
 
-
-
         }
-
-
-
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 20.dp)
-            .clip(RoundedCornerShape(20.dp))
-            .background(color = Color.White),
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp)
+                .clip(RoundedCornerShape(20.dp))
+                .background(color = Color.White),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center) {
+            verticalArrangement = Arrangement.Center
+        ) {
 
             Spacer(modifier = Modifier.height(30.dp))
-            
+
             Divider(modifier = Modifier.width(100.dp), color = Color.Black)
 
-
-            LazyColumn(modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(20.dp))
-                .background(color = Color.White)
-                .padding(top = 30.dp)){ items(10){
-
-
-                Spacer(modifier = Modifier.height(10.dp))
-                Row (modifier = Modifier
+            LazyColumn(
+                modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 10.dp), horizontalArrangement = Arrangement.SpaceBetween){
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(color = Color.White)
+                    .padding(top = 30.dp)
+            ) {
+                items(count = 10)
 
-                  Row() {
+                {
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { navHostController.navigate(Screens.ChatScreen.route) }
+                            .padding(horizontal = 10.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
 
-                      Card(shape = CircleShape, modifier = Modifier.size(60.dp)) {
+                        Row() {
+                            Card(shape = CircleShape, modifier = Modifier.size(60.dp)) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.background),
+                                    contentDescription = "",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier.fillMaxSize()
+                                )
 
-                          Image(
-                              painter = painterResource(id = R.drawable.background),
-                              contentDescription = "",
-                              contentScale = ContentScale.Crop,
-                              modifier = Modifier.fillMaxSize()
-                          )
-                      }
+                            }
 
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Column {
+                                Text(
+                                    text = "sakshi pawar",
+                                    color = Color.Black,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Text(text = "hello", color = Color.Gray)
+                            }
 
-                      Spacer(modifier = Modifier.width(10.dp))
-                      Column {
-                          Text(text = "Nandini Singh", color = Color.Black, fontWeight = FontWeight.Bold)
-                          Text(text = "gvbyjhcbsjyhnjcnc", color = Color.Gray)
-                      }
-                  }
+                        }
 
+                        Column(
+                            modifier = Modifier,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
 
-                    Column(modifier = Modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(text = "12:30", color = Color.Gray)
+                            Icon(imageVector = Icons.Default.Done, contentDescription = "")
 
+                        }
 
-                        Text(text = " 12:30", color = Color.Gray)
-                        Icon(imageVector = Icons.Default.Done, contentDescription = "")
                     }
-                }
-            }
-            
-            
-        }
- 
 
-    }
+
+                }
+
+            }
+        }
     }
 }

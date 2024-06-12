@@ -18,17 +18,26 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import project.elite.chatpractice.R
+import project.elite.chatpractice.navigation.Screens
+import project.elite.chatpractice.signin.datastore.UserDatastore
 
 @Composable
-fun StartScreen() {
+fun StartScreen(navHostController: NavController) {
+    val context = LocalContext.current
+    val datastore = UserDatastore(context)
+    val name = datastore.getName.collectAsState(initial = "")
+    val isLoggedIn = datastore.getLoginStatus.collectAsState(initial = false)
 
     Column(
         modifier = Modifier
@@ -69,7 +78,11 @@ fun StartScreen() {
         }
 
 
-        Button(onClick = {   }) {
+        Button(onClick = {
+//            navHostController.navigate(if (isLoggedIn.value) Screens.HomeScreen.route else Screens.SignInScreen.route)
+            navHostController.navigate(Screens.SignInScreen.route)
+        }) {
+
 
             Text(text = "Get Started", fontSize = 16.sp, fontWeight = FontWeight.Bold)
 
