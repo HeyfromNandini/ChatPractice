@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -29,7 +30,7 @@ fun BottomBar(
     bottomBarState: MutableState<Boolean> = mutableStateOf(true)
 ) {
     if (bottomBarState.value) {
-        BoxWithConstraints(
+        Box(
             modifier = Modifier.fillMaxSize()
         ) {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -52,12 +53,12 @@ fun BottomBar(
                             icon = {
                                 item.icon?.let {
                                     Icon(
-                                        painter = painterResource(id = it),
+                                        imageVector = it,
                                         contentDescription = "",
                                         modifier = Modifier
                                             .size(35.dp)
-                                            .padding(bottom = 5.dp),
-                                        tint = Color.Blue
+                                            .padding(bottom = 2.dp),
+                                        tint = Color.Black
                                     )
                                 }
                             },
@@ -67,15 +68,15 @@ fun BottomBar(
                                         text = it,
                                         color = Color.Black,
                                         softWrap = true,
-                                        fontSize = 8.5.sp
+                                        fontSize = 9.sp
                                     )
                                 }
                             },
                             selected = currentRoute?.hierarchy?.any { nav ->
                                 nav.route == item.route
                             } == true,
-                            selectedContentColor = Color.Yellow,
-                            unselectedContentColor = Color.White,
+                            selectedContentColor = Color.Blue,
+                            unselectedContentColor = Color.Green,
                             modifier = Modifier
                                 .weight(1f)
                                 .background(Color.White),

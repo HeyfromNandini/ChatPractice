@@ -28,10 +28,6 @@ import project.elite.chatpractice.ui.theme.ChatPracticeTheme
 
 class MainActivity : ComponentActivity() {
 
-
-
-
-
     private val googleAuthUiClient by lazy {
         GoogleAuthUiClient(
             context = applicationContext,
@@ -57,8 +53,7 @@ class MainActivity : ComponentActivity() {
                     navBackStackEntry?.destination?.route?.let { route ->
                         bottomBarState.value = when (route) {
                             Screens.HomeScreen.route,
-                            Screens.ProfileScreen.route,
-                            Screens.ChatScreen.route -> true
+                            Screens.ProfileScreen.route ->true
                             else -> false
                         }
                     }
@@ -73,6 +68,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         val scaffoldState = rememberScaffoldState()
                         MainNavController(
+                            it,
                             navController
                         )
                     }

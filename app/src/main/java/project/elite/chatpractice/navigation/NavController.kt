@@ -10,6 +10,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,6 +28,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.google.android.gms.auth.api.identity.Identity
 import kotlinx.coroutines.launch
+import project.elite.chatpractice.data.Person
 import project.elite.chatpractice.screens.ChatScreen
 import project.elite.chatpractice.screens.HomeScreen
 import project.elite.chatpractice.screens.StartScreen
@@ -39,6 +41,7 @@ import project.elite.chatpractice.signin.datastore.UserDatastore
 
 @Composable
 fun MainNavController(
+    paddingValues: PaddingValues,
     navController: NavHostController,
 ) {
 
@@ -141,7 +144,7 @@ fun MainNavController(
                             Toast.LENGTH_LONG
                         ).show()
 
-                        navController.popBackStack()
+                        navController.navigate(Screens.StartScreen.route)
                     }
                 }
             )
@@ -155,12 +158,12 @@ fun MainNavController(
 
 
         composable(Screens.HomeScreen.route) {
-            HomeScreen(navHostController = navController)
+            println("UserData is ${googleAuthUiClient.getSignedInUser()}")
+            HomeScreen(navController = navController, userData = userData)
         }
-
-
         composable(Screens.ChatScreen.route) {
-            ChatScreen(navController = navController)
+            println("UserDataSS is ${googleAuthUiClient.getSignedInUser()}")
+            ChatScreen(navController = navController, userData = googleAuthUiClient.getSignedInUser())
         }
 
         composable(Screens.SplashScreen.route) {

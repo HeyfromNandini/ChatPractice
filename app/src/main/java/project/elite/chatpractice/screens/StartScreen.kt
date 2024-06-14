@@ -81,7 +81,7 @@ fun StartScreen(navHostController: NavController) {
         Button(onClick = {
 //            navHostController.navigate(if (isLoggedIn.value) Screens.HomeScreen.route else Screens.SignInScreen.route)
             navHostController.navigate(Screens.SignInScreen.route)
-        }) {
+        }, modifier = Modifier.padding(start = 40.dp, top = 20.dp)) {
 
 
             Text(text = "Get Started", fontSize = 16.sp, fontWeight = FontWeight.Bold)

@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import project.elite.chatpractice.navigation.Screens
 
 @Composable
 fun ProfileScreen(
@@ -37,7 +38,7 @@ fun ProfileScreen(
             .padding(16.dp)
     ) {
         IconButton(
-            onClick = { },
+            onClick = { navController.navigate(Screens.HomeScreen.route)},
             modifier = Modifier.align(Alignment.TopStart)
         ) {
             Icon(

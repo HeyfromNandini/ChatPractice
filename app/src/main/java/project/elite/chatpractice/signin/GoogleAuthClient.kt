@@ -11,7 +11,7 @@ import com.google.firebase.auth.auth
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.tasks.await
 import project.elite.chatpractice.R
-
+import project.elite.chatpractice.signin.firestore.updateUserInfoToFirebase
 
 
 class GoogleAuthUiClient(
@@ -39,6 +39,7 @@ class GoogleAuthUiClient(
         val googleCredentials = GoogleAuthProvider.getCredential(googleIdToken, null)
         return try {
             val user = auth.signInWithCredential(googleCredentials).await().user
+            updateUserInfoToFirebase(context, email = user?.email ?:"", name = user?.displayName ?:"", pfp = user?.photoUrl.toString())
             SignInResult(
                 data = user?.run {
                     UserData(

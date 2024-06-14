@@ -45,7 +45,7 @@ fun SignInScreen(
 ) {
     val context = LocalContext.current
 
-    // Show toast message for sign-in error
+
     LaunchedEffect(key1 = state.signInError) {
         state.signInError?.let { error ->
             Toast.makeText(
