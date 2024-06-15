@@ -65,12 +65,10 @@ fun HomeScreen(
     userData: UserData?,
     navController: NavController
 ) {
-
     var allUsers by remember { mutableStateOf<List<UserInfo>?>(null) }
 
     JetFirestore(path = {
-//        collection(Collections.UserInfo.name)
-                        collection("UserInfo")
+        collection("UserInfo")
     }, onRealtimeCollectionFetch = { values, _ ->
         allUsers = values?.getListOfObjects()
     }) {
@@ -81,13 +79,16 @@ fun HomeScreen(
         ) {
             println("all users.$allUsers")
 
-
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(top = 30.dp)
             ) {
-                HeaderOrViewStory(userData, personList = emptyList())
+                // Create a list of images from allUsers
+                val images = allUsers?.map { it.image ?: "" } ?: emptyList()
+                val name = allUsers?.map { it.name ?: "" } ?: emptyList()
+
+                HeaderOrViewStory(userData = userData, images = images,names= name)
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -106,11 +107,10 @@ fun HomeScreen(
                         modifier = Modifier.padding(bottom = 15.dp, top = 30.dp)
                     ) {
                         items(allUsers ?: emptyList()) { userInfo ->
-                            val user = Person(id= (0..100).random(),name = userInfo.name, icon = userInfo.image)
+                            val user = Person(id = (0..100).random(), name = userInfo.name, icon = userInfo.image ?: "")
                             UserEachRow(user) {
                                 navController.currentBackStackEntry?.savedStateHandle?.set(
                                     "data", user
-
                                 )
                                 navController.navigate(Screens.ChatScreen.route)
                             }
@@ -118,16 +118,15 @@ fun HomeScreen(
                     }
                 }
             }
-
         }
     }
-
 }
 
 @Composable
 fun HeaderOrViewStory(
     userData: UserData?,
-    personList: List<Person>
+    images: List<String>,
+    names: List<String>
 ) {
     Column(
         modifier = Modifier
@@ -140,12 +139,45 @@ fun HeaderOrViewStory(
                 AddStoryLayout()
                 SpacerWidth()
             }
-            items(personList) {
-                UserStory(person = it)
+            items(images.zip(names)) { (image, name) ->
+                UserStory(image = image, name = name)
+                SpacerWidth() // Adding space between stories
             }
         }
     }
 }
+
+@Composable
+fun UserStory(
+    image: String,
+    name: String,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier.padding(end = 10.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .border(1.dp, Yellow, CircleShape)
+                .background(Yellow, shape = CircleShape)
+                .size(70.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            // Replace IconComponentDrawable with appropriate composable
+            IconComponentDrawable(icon = image, size = 65.dp)
+        }
+        SpacerHeight(8.dp)
+        Text(
+            text = name,
+            style = TextStyle(
+                color = Color.White, fontSize = 13.sp,
+            ),
+            modifier = Modifier.align(CenterHorizontally)
+        )
+    }
+}
+
+
 
 @Composable
 fun BottomSheetSwipeUp(
@@ -181,7 +213,7 @@ fun UserEachRow(
             ) {
                 Row {
                     // Replace IconComponentDrawable with appropriate composable
-                     IconComponentDrawable(icon = person.icon, size = 60.dp)
+                    IconComponentDrawable(icon = person.icon, size = 60.dp)
                     SpacerWidth()
                     Column {
                         person.name?.let {
@@ -192,13 +224,7 @@ fun UserEachRow(
                             )
                         }
                         SpacerHeight(5.dp)
-//                        Text(
-//                            text = "okay", style = TextStyle(
-//                                color = Gray, fontSize = 14.sp
-//                            )
-//                        )
                     }
-
                 }
                 Text(
                     text = "12:23pm", style = TextStyle(
@@ -210,12 +236,11 @@ fun UserEachRow(
             Divider(modifier = Modifier.fillMaxWidth(), thickness = 1.dp, color = Line)
         }
     }
-
 }
 
 @Composable
 fun UserStory(
-    person: Person, modifier: Modifier = Modifier
+    userData: UserData?, modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier.padding(end = 10.dp)
@@ -228,17 +253,20 @@ fun UserStory(
             contentAlignment = Alignment.Center
         ) {
             // Replace IconComponentDrawable with appropriate composable
-             IconComponentDrawable(icon = person.icon, size = 65.dp)
+            if (userData != null) {
+                IconComponentDrawable(icon = userData.profilePictureUrl, size = 65.dp)
+            }
         }
         SpacerHeight(8.dp)
-        person.name?.let {
-            Text(
-                text = it, style = TextStyle(
-                    color = Color.White, fontSize = 13.sp,
-                ), modifier = Modifier.align(CenterHorizontally)
-            )
+        if (userData != null) {
+            userData.username?.let {
+                Text(
+                    text = it, style = TextStyle(
+                        color = Color.White, fontSize = 13.sp,
+                    ), modifier = Modifier.align(CenterHorizontally)
+                )
+            }
         }
-
     }
 }
 
@@ -263,7 +291,7 @@ fun AddStoryLayout(
                 contentAlignment = Alignment.Center
             ) {
                 // Replace IconComponentImageVector with appropriate composable
-                 IconComponentImageVector(icon = Icons.Default.Add, size = 12.dp, tint = Yellow)
+                IconComponentImageVector(icon = Icons.Default.Add, size = 12.dp, tint = Yellow)
             }
         }
         SpacerHeight(8.dp)
@@ -277,36 +305,29 @@ fun AddStoryLayout(
 
 @Composable
 fun Header(userData: UserData?) {
-    val annotatedString = buildAnnotatedString {
-        withStyle(
-            style = SpanStyle(
+
+Row {
+
+    Text(
+        text = "Welcome Back",
+        textAlign = TextAlign.Center,
+        fontSize = 20.sp,
+        fontWeight = FontWeight.Bold,
+        color = Color.White
+
+    )
+    if (userData != null) {
+        userData.username?.let {
+            Text(
+                text = it,
                 color = Color.White,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.W300
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold
             )
-        ) {
-            append("welcome back")
-        }
-        userData?.username?.let { username ->
-            withStyle(
-                style = SpanStyle(
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
-                )
-            ) {
-                append(" $username")
-            }
         }
     }
 
-    Text(
-        text = annotatedString,
-        textAlign = TextAlign.Center,
-        fontSize = 26.sp,
-        fontWeight = FontWeight.SemiBold,
-        color = Color.White
-    )
+}
 }
 
 @SuppressLint("UnnecessaryComposedModifier", "UnrememberedMutableInteractionSource")
